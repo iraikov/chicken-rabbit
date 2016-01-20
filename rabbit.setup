@@ -15,6 +15,6 @@
   `(,(dynld-name "rabbit") ,(dynld-name "rabbit.import") )
     
   ; Assoc list with properties for your extension:
-  `((version 1.0)
+  `((version "v1.1")
     ))
 

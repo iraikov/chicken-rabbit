@@ -1,0 +1,25 @@
+;; -*- Hen -*-
+
+((egg "rabbit.egg") ; This should never change
+
+ ; List here all the files that should be bundled as part of your egg.  
+
+ (files "rabbit.setup" "rabbit.meta"  "rabbit.scm" "rabbitlib.c" "tests")
+
+ ; Your egg's license:
+
+ (license "Public Domain")
+
+ ; Pick one from the list of categories (see below) for your egg and
+ ; enter it here.
+
+ (category crypt)
+
+ ; A list of eggs mpi depends on.
+
+ (test-depends test)
+
+ (maintainer "Ivan Raikov")
+ (author "Martin Boesgaard, Mette Vesterager, Thomas Christensen and Erik Zenner")
+
+ (synopsis "Rabbit stream cipher"))

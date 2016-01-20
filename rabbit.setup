@@ -1,0 +1,20 @@
+;; -*- Hen -*-
+
+(define (dynld-name fn)		
+  (make-pathname #f fn ##sys#load-dynamic-extension))	
+
+(compile -S -O2 -d0 -I. -s rabbit.scm -j rabbit)
+(compile -O2 -d0 -s rabbit.import.scm)
+
+(install-extension
+
+  ; Name of your extension:
+  'rabbit
+
+  ; Files to install for your extension:
+  `(,(dynld-name "rabbit") ,(dynld-name "rabbit.import") )
+    
+  ; Assoc list with properties for your extension:
+  `((version 1.0)
+    ))
+

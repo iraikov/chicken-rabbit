@@ -1,30 +1,18 @@
-(use rabbit srfi-4 test)
-
-(randomize)
-
-(define (random-blob n)
-  (let ((v (make-u8vector n)))
-    (let loop ((n n))
-      (if (> n 0)
-          (begin 
-            (u8vector-set! v (- n 1) (random 255))
-            (loop (- n 1)))
-          (u8vector->blob v)))
-    ))
+(import scheme (chicken base) (chicken random) (chicken blob) rabbit test)
                        
 (test-group "rabbit 1000 random vectors" 
   (let loop ((n 1000))
     (test-assert
       (if (= n 0) #t 
           (if (let* (
-                     (keylen (+ (random 10) 24))
-                     (key (random-blob keylen))
-                     (datalen (random 100000))
-                     (data (random-blob datalen))
-                     (ctx (rabbit-make key))
+                     (keylen (+ (pseudo-random-integer 10) 24))
+                     (key (random-bytes (make-blob keylen)))
+                     (datalen (pseudo-random-integer 100000))
+                     (data (random-bytes (make-blob datalen)))
+                     (ctx (make-context key))
                      )
-                (let ((res (not (equal? data (rabbit-decode! ctx (rabbit-encode! ctx data))))))
-                  (rabbit-destroy! ctx)
+                (let ((res (not (equal? data (decode! ctx (encode! ctx data))))))
+                  (destroy-context! ctx)
                   res))
               #f 
               (loop (- n 1)))))))

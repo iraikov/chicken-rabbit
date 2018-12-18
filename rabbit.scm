@@ -8,18 +8,13 @@
 
 (module rabbit
 
-        (rabbit-debuglevel
-         rabbit-make
-         rabbit-destroy!
-         rabbit-encode!
-         rabbit-decode!)
+        (debuglevel make-context destroy-context! encode! decode!)
 
-	(import scheme chicken foreign)
-        (import (only extras printf))
+	(import scheme (chicken base) (chicken foreign) (chicken blob) (chicken format))
 
-        (define rabbit-debuglevel (make-parameter 0))
-        (define (rabbit-log level . x)
-          (if (>= (rabbit-debuglevel) level) (apply printf (append (list "rabbit: ") x))))
+        (define debuglevel (make-parameter 0))
+        (define (logger level . x)
+          (if (>= (debuglevel) level) (apply printf (append (list "rabbit: ") x))))
 
 
 #>
@@ -28,8 +23,8 @@
 <#
 
 
-(define (rabbit-make key)  ;; key must be at least 24 bytes
-  (rabbit-log 1 "rabbit-make " (blob->string key))
+(define (make-context key)  ;; key must be at least 24 bytes
+  (logger 1 "make-context " (blob->string key))
   ((foreign-safe-lambda* nonnull-c-pointer ((scheme-object key))
 #<<END
      int len; void* keydata, *result;
@@ -42,8 +37,8 @@ END
   )
 
 
-(define (rabbit-destroy! ctx)
-  (rabbit-log 1 "rabbit-destroy " ctx)
+(define (destroy-context! ctx)
+  (logger 1 "destroy-context " ctx)
   ((foreign-lambda* void ((nonnull-c-pointer ctx))
 #<<END
      _rabbit_destroy(ctx);
@@ -51,8 +46,8 @@ END
    ) ctx)
 )
 
-(define (rabbit-encode! ctx v)
-  (rabbit-log 2 "rabbit-encode/decode " ctx " " v)
+(define (encode! ctx v)
+  (logger 2 "encode/decode " ctx " " v)
   (if (blob? v) 
       (begin
         ((foreign-lambda* void ((nonnull-c-pointer ctx) (scheme-object v))
@@ -66,6 +61,6 @@ EOF
         v)
       #f))
 
-(define rabbit-decode! rabbit-encode!)
+(define decode! encode!)
 
 )

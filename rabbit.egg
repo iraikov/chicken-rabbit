@@ -3,7 +3,7 @@
 ((synopsis "Rabbit stream cipher.")
  (license "Public Domain")
  (category crypt)
- (dependencies datatype matchable yasos srfi-1)
+ (dependencies srfi-1)
  (test-dependencies test srfi-1)
  (maintainer "Ivan Raikov")
  (author "Martin Boesgaard, Mette Vesterager, Thomas Christensen and Erik Zenner")
